@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-cream: #ffffff;
+  --color-offwhite: #f5f5f5;
+  --color-charcoal: #1c1c1c;
+  --color-grey: #6b6b6b;
+}
+
+@theme inline {
+  --color-cream: var(--color-cream);
+  --color-offwhite: var(--color-offwhite);
+  --color-charcoal: var(--color-charcoal);
+  --color-grey: var(--color-grey);
+  --font-display: var(--font-cormorant), serif;
+  --font-sans: var(--font-inter), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.dark {
+  --color-cream: #1c1c1c;
+  --color-offwhite: #262626;
+  --color-charcoal: #f5f5f5;
+  --color-grey: #a3a3a3;
+}
+
+::selection {
+  background: var(--color-charcoal);
+  color: var(--color-cream);
+}
+
+.font-display {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif !important;
+}
+
+/* Custom cursor replaces the native one on precise-pointer devices */
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+}
+
+/* Giant outline marquee */
+.outline-marquee-track {
+  animation: outlineMarquee 45s linear infinite;
+}
+@keyframes outlineMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-charcoal) 35%, transparent);
+}
+
