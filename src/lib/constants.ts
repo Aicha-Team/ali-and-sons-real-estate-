@@ -8,6 +8,17 @@ export const SITE = {
   address:
     "Ali Khalfan Rashed Al Mutawa Al Dhaheri Bldg, Plot No. 29 Al Ain Road, Umm Al Nar, Abu Dhabi, UAE",
   mapsEmbed: "https://www.google.com/maps/d/embed?mid=1et3sQhU0l9kkRz7IzODmWyqAm3vAXLV3",
+  mapsEmbedSatellite:
+    "https://www.google.com/maps?q=" +
+    encodeURIComponent(
+      "Ali Khalfan Rashed Al Mutawa Al Dhaheri Bldg, Umm Al Nar, Abu Dhabi, UAE"
+    ) +
+    "&t=k&output=embed",
+  mapsDirections:
+    "https://www.google.com/maps/dir/?api=1&destination=" +
+    encodeURIComponent(
+      "Ali Khalfan Rashed Al Mutawa Al Dhaheri Bldg, Umm Al Nar, Abu Dhabi, UAE"
+    ),
 };
 
 export const NAV_LINKS = [

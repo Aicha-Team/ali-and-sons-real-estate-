@@ -5,8 +5,11 @@ import {
   PROPERTIES_QUERY,
   FEATURED_PROPERTIES_QUERY,
   PROPERTY_BY_SLUG_QUERY,
+  CITIES_QUERY,
+  PROPERTY_CATEGORIES_QUERY,
+  PROPERTY_TYPES_QUERY,
 } from "@/sanity/queries";
-import { Property } from "./types";
+import { Property, Taxonomy } from "./types";
 
 type SanityProperty = {
   title: string;
@@ -65,4 +68,16 @@ export async function getPropertyBySlug(slug: string): Promise<Property | undefi
     slug,
   });
   return doc ? toProperty(doc) : undefined;
+}
+
+export async function getCities(): Promise<Taxonomy[]> {
+  return sanityClient.fetch<Taxonomy[]>(CITIES_QUERY);
+}
+
+export async function getPropertyCategories(): Promise<Taxonomy[]> {
+  return sanityClient.fetch<Taxonomy[]>(PROPERTY_CATEGORIES_QUERY);
+}
+
+export async function getPropertyTypes(): Promise<Taxonomy[]> {
+  return sanityClient.fetch<Taxonomy[]>(PROPERTY_TYPES_QUERY);
 }

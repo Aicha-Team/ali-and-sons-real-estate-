@@ -13,12 +13,14 @@ export default function Dropdown({
   options,
   placeholder,
   className,
+  tone = "light",
 }: {
   value: string;
   onChange: (value: string) => void;
   options: DropdownOption[];
   placeholder: string;
   className?: string;
+  tone?: "light" | "dark";
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -49,15 +51,23 @@ export default function Dropdown({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-3 bg-transparent text-sm text-charcoal cursor-pointer"
+        className={cn(
+          "flex w-full items-center justify-between gap-3 bg-transparent text-sm cursor-pointer",
+          tone === "dark" ? "text-white" : "text-charcoal"
+        )}
       >
-        <span className={cn(!selected && "text-charcoal/60")}>
+        <span
+          className={cn(
+            !selected && (tone === "dark" ? "text-white/60" : "text-charcoal/60")
+          )}
+        >
           {selected ? selected.label : placeholder}
         </span>
         <ChevronDown
           size={14}
           className={cn(
-            "shrink-0 text-grey transition-transform duration-300",
+            "shrink-0 transition-transform duration-300",
+            tone === "dark" ? "text-white/70" : "text-grey",
             open && "rotate-180"
           )}
         />

@@ -1,13 +1,14 @@
-export type PropertyCity = "Abu Dhabi" | "Dubai";
-export type PropertyCategory = "Residential" | "Commercial";
-export type PropertyType = "For Rent" | "For Sale";
+export interface Taxonomy {
+  name: string;
+  slug: string;
+}
 
 export interface Property {
   slug: string;
   title: string;
-  city: PropertyCity;
-  category: PropertyCategory;
-  type: PropertyType;
+  city: Taxonomy;
+  category: Taxonomy;
+  type: Taxonomy;
   price: number;
   currency: "AED";
   size: string;

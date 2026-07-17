@@ -1,7 +1,12 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { buildLegacyTheme } from "sanity";
+import { HelpCircleIcon } from "@sanity/icons/HelpCircle";
 import { schemaTypes } from "./sanity/schemas";
+import { StudioGuidePane } from "./sanity/components/StudioGuidePane";
+import { deleteWithCleanupAction } from "./sanity/actions/deleteWithCleanup";
+
+const TAXONOMY_TYPES = ["city", "propertyCategory", "propertyType"];
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
@@ -63,9 +68,32 @@ export default defineConfig({
           .title("Content")
           .items([
             S.listItem()
+              .title("Quick Guide")
+              .id("quick-guide")
+              .icon(HelpCircleIcon)
+              .child(
+                S.component(StudioGuidePane).id("quick-guide").title("Quick Guide")
+              ),
+            S.divider(),
+            S.listItem()
               .title("Properties")
               .schemaType("property")
               .child(S.documentTypeList("property").title("Properties")),
+            S.divider(),
+            S.listItem()
+              .title("Cities")
+              .schemaType("city")
+              .child(S.documentTypeList("city").title("Cities")),
+            S.listItem()
+              .title("Property Categories")
+              .schemaType("propertyCategory")
+              .child(
+                S.documentTypeList("propertyCategory").title("Property Categories")
+              ),
+            S.listItem()
+              .title("Property Types")
+              .schemaType("propertyType")
+              .child(S.documentTypeList("propertyType").title("Property Types")),
             S.divider(),
             S.listItem()
               .title("Site Content")
@@ -86,5 +114,13 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
+  },
+  document: {
+    actions: (prev, context) =>
+      TAXONOMY_TYPES.includes(context.schemaType)
+        ? prev.map((action) =>
+            action.action === "delete" ? deleteWithCleanupAction : action
+          )
+        : prev,
   },
 });

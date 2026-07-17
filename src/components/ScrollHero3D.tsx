@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import PropertySearchBar from "@/components/PropertySearchBar";
+import { Taxonomy } from "@/lib/types";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -18,10 +19,16 @@ export default function ScrollHero3D({
   image = DEFAULT_IMAGE,
   eyebrow = DEFAULT_EYEBROW,
   title = DEFAULT_TITLE,
+  cities,
+  categories,
+  types,
 }: {
   image?: string;
   eyebrow?: string;
   title?: string;
+  cities: Taxonomy[];
+  categories: Taxonomy[];
+  types: Taxonomy[];
 }) {
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
@@ -98,7 +105,7 @@ export default function ScrollHero3D({
           transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
           className="w-full max-w-5xl"
         >
-          <PropertySearchBar />
+          <PropertySearchBar cities={cities} categories={categories} types={types} />
         </motion.div>
 
         <motion.div

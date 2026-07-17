@@ -8,7 +8,12 @@ import IntroLoader from "@/components/IntroLoader";
 import StatCounter from "@/components/StatCounter";
 import ScrollReveal from "@/components/ScrollReveal";
 import OutlineMarquee from "@/components/OutlineMarquee";
-import { getFeaturedProperties } from "@/lib/properties";
+import {
+  getFeaturedProperties,
+  getCities,
+  getPropertyCategories,
+  getPropertyTypes,
+} from "@/lib/properties";
 import { getSiteContent } from "@/lib/siteContent";
 import { STATS } from "@/lib/constants";
 
@@ -18,10 +23,15 @@ const DEFAULT_WHO_WE_ARE =
 export const revalidate = 60;
 
 export default async function Home() {
-  const [featured, content] = await Promise.all([
+  const [featured, content, cities, categories, types] = await Promise.all([
     getFeaturedProperties(),
     getSiteContent(),
+    getCities(),
+    getPropertyCategories(),
+    getPropertyTypes(),
   ]);
+
+  const stats = content.stats?.length ? content.stats : STATS;
 
   return (
     <IntroLoader>
@@ -30,13 +40,16 @@ export default async function Home() {
           image={content.heroImage}
           eyebrow={content.heroEyebrow}
           title={content.heroTitle}
+          cities={cities}
+          categories={categories}
+          types={types}
         />
 
         {/* Stats strip */}
         <section className="bg-cream pt-24 pb-24 lg:pt-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-y-0 md:divide-x md:divide-charcoal/10">
-              {STATS.map((stat, i) => (
+              {stats.map((stat, i) => (
                 <div key={stat.label} className="px-4">
                   <StatCounter
                     to={stat.value}
@@ -55,14 +68,20 @@ export default async function Home() {
 
         <FeaturedPropertiesShowcase properties={featured} />
 
-        <BusinessCentreStrip />
+        <BusinessCentreStrip
+          eyebrow={content.businessCentreEyebrow}
+          heading={content.businessCentreHeading}
+          text={content.businessCentreText}
+          image={content.businessCentreImage}
+          buttonText={content.businessCentreButtonText}
+        />
 
         {/* About snippet */}
         <section className="bg-cream py-24 lg:py-32">
           <div className="mx-auto max-w-4xl px-6 lg:px-10 text-center">
             <FadeIn>
               <span className="text-xs uppercase tracking-[0.25em] text-grey font-medium">
-                Who We Are
+                {content.whoWeAreEyebrow || "Who We Are"}
               </span>
             </FadeIn>
             <ScrollReveal
@@ -80,7 +99,7 @@ export default async function Home() {
                 href="/about-us"
                 className="mt-10 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-medium text-charcoal border-b border-charcoal pb-1 hover:opacity-60 transition-opacity"
               >
-                About Us <ArrowRight size={14} />
+                {content.whoWeAreButtonText || "About Us"} <ArrowRight size={14} />
               </Link>
             </FadeIn>
           </div>

@@ -12,7 +12,22 @@ const textVariants = {
   visible: { opacity: 1, x: 0 },
 };
 
-export default function BusinessCentreStrip() {
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1600&auto=format&fit=crop";
+
+export default function BusinessCentreStrip({
+  eyebrow = "AS Business Centre",
+  heading = "Fully Serviced Office Spaces in Abu Dhabi",
+  text = "We provide fully serviced & furnished office spaces that fulfill the need of start-up companies wanting to set up operations in Abu Dhabi — plus convenient, cost-effective solutions for established businesses.",
+  image = DEFAULT_IMAGE,
+  buttonText = "Learn More",
+}: {
+  eyebrow?: string;
+  heading?: string;
+  text?: string;
+  image?: string;
+  buttonText?: string;
+}) {
   return (
     <section className="bg-offwhite overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-24 lg:py-32 grid gap-16 lg:grid-cols-2 items-center">
@@ -30,31 +45,28 @@ export default function BusinessCentreStrip() {
             transition={{ duration: 0.6, ease: EASE }}
             className="block text-xs uppercase tracking-[0.25em] text-grey font-medium"
           >
-            AS Business Centre
+            {eyebrow}
           </motion.span>
           <motion.h2
             variants={textVariants}
             transition={{ duration: 0.6, ease: EASE }}
             className="font-display font-normal text-charcoal mt-4 text-4xl md:text-5xl leading-[1.1]"
           >
-            Fully Serviced Office Spaces in Abu Dhabi
+            {heading}
           </motion.h2>
           <motion.p
             variants={textVariants}
             transition={{ duration: 0.6, ease: EASE }}
             className="mt-6 text-grey leading-relaxed max-w-lg"
           >
-            We provide fully serviced &amp; furnished office spaces that fulfill
-            the need of start-up companies wanting to set up operations in Abu
-            Dhabi — plus convenient, cost-effective solutions for established
-            businesses.
+            {text}
           </motion.p>
           <motion.div variants={textVariants} transition={{ duration: 0.6, ease: EASE }}>
             <Link
               href="/business-centre"
               className="mt-10 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-medium text-charcoal border-b border-charcoal pb-1 hover:opacity-60 transition-opacity"
             >
-              Learn More <ArrowRight size={14} />
+              {buttonText} <ArrowRight size={14} />
             </Link>
           </motion.div>
         </motion.div>
@@ -66,12 +78,7 @@ export default function BusinessCentreStrip() {
           transition={{ duration: 0.8, ease: EASE }}
           className="relative aspect-[4/3]"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1600&auto=format&fit=crop"
-            alt="AS Business Centre office space"
-            fill
-            className="object-cover"
-          />
+          <Image src={image} alt="AS Business Centre office space" fill className="object-cover" />
         </motion.div>
       </div>
     </section>

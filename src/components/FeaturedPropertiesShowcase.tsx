@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Building2, Landmark, Briefcase, MapPin, type LucideIcon } from "lucide-react";
 import { Property } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 
@@ -16,107 +17,22 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 type MarqueeLogo = {
   name: string;
-  icon:
-    | "code"
-    | "dots"
-    | "circle-ring"
-    | "arrow"
-    | "wave-circle"
-    | "lines"
-    | "bolt"
-    | "plus";
+  icon: LucideIcon;
 };
 
 const MARQUEE_LOGOS: MarqueeLogo[] = [
-  { name: "C40 Building", icon: "code" },
-  { name: "C55 Building", icon: "dots" },
-  { name: "Sidra Tower", icon: "circle-ring" },
-  { name: "Sidra Village", icon: "arrow" },
-  { name: "AS Business Centre", icon: "wave-circle" },
-  { name: "C09 Building", icon: "lines" },
-  { name: "Al Rawdhat", icon: "bolt" },
-  { name: "Umm Al Nar", icon: "plus" },
+  { name: "C40 Building", icon: Building2 },
+  { name: "C55 Building", icon: Building2 },
+  { name: "Sidra Tower", icon: Landmark },
+  { name: "Sidra Village", icon: Landmark },
+  { name: "AS Business Centre", icon: Briefcase },
+  { name: "C09 Building", icon: Building2 },
+  { name: "Al Rawdhat", icon: MapPin },
+  { name: "Umm Al Nar", icon: MapPin },
 ];
 
-function MarqueeIcon({ type }: { type: MarqueeLogo["icon"] }) {
-  switch (type) {
-    case "code":
-      return (
-        <svg width="22" height="18" viewBox="0 0 22 18" fill="none">
-          <polyline
-            points="6,4 1,9 6,14"
-            stroke="#1C1C1C"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <polyline
-            points="16,4 21,9 16,14"
-            stroke="#1C1C1C"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <line x1="13" y1="2" x2="9" y2="16" stroke="#1C1C1C" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      );
-    case "dots":
-      return (
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="#1C1C1C">
-          {[3, 10, 17].map((cy) =>
-            [3, 10, 17].map((cx) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="2.2" />)
-          )}
-        </svg>
-      );
-    case "circle-ring":
-      return (
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <circle cx="11" cy="11" r="9" stroke="#1C1C1C" strokeWidth="2" />
-          <circle cx="11" cy="11" r="4" stroke="#1C1C1C" strokeWidth="2" />
-        </svg>
-      );
-    case "arrow":
-      return (
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <line x1="2" y1="16" x2="16" y2="2" stroke="#1C1C1C" strokeWidth="2" strokeLinecap="round" />
-          <polyline
-            points="7,2 16,2 16,11"
-            stroke="#1C1C1C"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    case "wave-circle":
-      return (
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <circle cx="11" cy="11" r="9" stroke="#1C1C1C" strokeWidth="1.5" />
-          <path d="M5 11Q8 7 11 11Q14 15 17 11" stroke="#1C1C1C" strokeWidth="1.5" fill="none" />
-        </svg>
-      );
-    case "lines":
-      return (
-        <svg width="24" height="18" viewBox="0 0 24 18" fill="none">
-          <line x1="0" y1="3" x2="24" y2="3" stroke="#1C1C1C" strokeWidth="2.2" strokeLinecap="round" />
-          <line x1="6" y1="9" x2="24" y2="9" stroke="#1C1C1C" strokeWidth="2.2" strokeLinecap="round" />
-          <line x1="0" y1="15" x2="18" y2="15" stroke="#1C1C1C" strokeWidth="2.2" strokeLinecap="round" />
-        </svg>
-      );
-    case "bolt":
-      return (
-        <svg width="14" height="20" viewBox="0 0 14 20" fill="#1C1C1C">
-          <polygon points="8,0 0,11 6,11 6,20 14,9 8,9" />
-        </svg>
-      );
-    case "plus":
-      return (
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="#1C1C1C">
-          <rect x="7.5" y="0" width="3" height="18" />
-          <rect x="0" y="7.5" width="18" height="3" />
-        </svg>
-      );
-  }
+function MarqueeIcon({ icon: Icon }: { icon: LucideIcon }) {
+  return <Icon size={18} strokeWidth={1.75} className="text-charcoal" />;
 }
 
 function ArrowUpRightIcon() {
@@ -211,7 +127,7 @@ function PropertyShowcaseCard({ property, index }: { property: Property; index: 
           {property.title}
         </h3>
         <div className="mt-1.5 flex items-center gap-4">
-          <span className="text-[12px] uppercase tracking-[0.1em] text-[#6b6b6b]">{property.city}</span>
+          <span className="text-[12px] uppercase tracking-[0.1em] text-[#6b6b6b]">{property.city.name}</span>
           <span className="text-[12px] font-medium text-[#1c1c1c]">
             {formatPrice(property.price)}
           </span>
@@ -315,7 +231,7 @@ export default function FeaturedPropertiesShowcase({
               <div className="marquee-projects flex w-max">
                 {[...MARQUEE_LOGOS, ...MARQUEE_LOGOS].map((logo, i) => (
                   <div key={i} className="flex shrink-0 items-center gap-2.5 px-8">
-                    <MarqueeIcon type={logo.icon} />
+                    <MarqueeIcon icon={logo.icon} />
                     <span className="whitespace-nowrap text-sm font-medium tracking-wide text-charcoal/70">
                       {logo.name}
                     </span>

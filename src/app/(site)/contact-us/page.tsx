@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MapPin, ArrowUpRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import PageHero from "@/components/PageHero";
 import EnquiryForm from "@/components/EnquiryForm";
@@ -68,13 +69,46 @@ export default function ContactUsPage() {
         </div>
       </section>
 
-      <section className="w-full aspect-[21/9] min-h-[360px] border-t border-charcoal/10">
-        <iframe
-          src={SITE.mapsEmbed}
-          title="Ali & Sons Real Estate location"
-          className="w-full h-full"
-          loading="lazy"
-        />
+      <section className="bg-cream pb-24 lg:pb-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <FadeIn className="relative rounded-2xl overflow-hidden border border-charcoal/10 shadow-[0_24px_64px_-24px_rgba(0,0,0,0.25)] aspect-[21/9] min-h-[420px]">
+            <iframe
+              src={SITE.mapsEmbedSatellite}
+              title="Ali & Sons Real Estate location — satellite view"
+              className="absolute inset-0 w-full h-full grayscale-[15%] contrast-[1.05]"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/70 via-transparent to-transparent" />
+
+            <div className="absolute bottom-6 left-6 right-6 sm:right-auto sm:max-w-sm pointer-events-auto">
+              <div className="rounded-xl bg-white/95 backdrop-blur-md shadow-lg p-5 flex items-start gap-4">
+                <span className="flex items-center justify-center h-10 w-10 shrink-0 rounded-full bg-charcoal text-white">
+                  <MapPin size={18} strokeWidth={1.5} />
+                </span>
+                <div className="flex-1">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-grey font-medium">
+                    Our Location
+                  </span>
+                  <p className="text-sm text-charcoal leading-relaxed mt-1 mb-3">
+                    {SITE.address}
+                  </p>
+                  <a
+                    href={SITE.mapsDirections}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] font-medium text-charcoal hover:opacity-60 transition-opacity"
+                  >
+                    Get Directions
+                    <ArrowUpRight size={13} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
       </section>
     </div>
   );

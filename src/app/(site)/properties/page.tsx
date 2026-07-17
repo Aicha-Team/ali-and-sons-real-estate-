@@ -4,7 +4,12 @@ import PropertiesFilterBar from "@/components/PropertiesFilterBar";
 import PropertyCard from "@/components/PropertyCard";
 import FadeIn from "@/components/FadeIn";
 import PageHero from "@/components/PageHero";
-import { getAllProperties } from "@/lib/properties";
+import {
+  getAllProperties,
+  getCities,
+  getPropertyCategories,
+  getPropertyTypes,
+} from "@/lib/properties";
 import { Property } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -24,24 +29,31 @@ function PropertiesGrid({
   const { city, category, type } = searchParams;
 
   const filtered = properties.filter((p) => {
-    if (city && p.city !== city) return false;
-    if (category && p.category !== category) return false;
-    if (type && p.type !== type) return false;
+    if (city && p.city.slug !== city) return false;
+    if (category && p.category.slug !== category) return false;
+    if (type && p.type.slug !== type) return false;
     return true;
   });
 
   return (
     <div className="mx-auto max-w-7xl px-6 lg:px-10 py-24 lg:py-32">
-      <p className="text-sm text-grey mb-8">
-        {filtered.length} {filtered.length === 1 ? "property" : "properties"} found
-      </p>
+      <div className="mb-14 flex items-end justify-between border-b border-charcoal/10 pb-6">
+        <p className="flex items-baseline gap-3">
+          <span className="font-display font-normal text-4xl text-charcoal">
+            {String(filtered.length).padStart(2, "0")}
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.25em] text-grey font-medium">
+            {filtered.length === 1 ? "Property" : "Properties"} Available
+          </span>
+        </p>
+      </div>
 
       {filtered.length === 0 ? (
         <p className="text-grey py-24 text-center">
           No properties match your filters. Try adjusting your search.
         </p>
       ) : (
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((property, i) => (
             <FadeIn key={property.slug} delay={(i % 3) * 0.08}>
               <PropertyCard property={property} />
@@ -59,7 +71,12 @@ export default async function PropertiesPage({
   searchParams: Promise<{ city?: string; category?: string; type?: string }>;
 }) {
   const resolvedParams = await searchParams;
-  const properties = await getAllProperties();
+  const [properties, cities, categories, types] = await Promise.all([
+    getAllProperties(),
+    getCities(),
+    getPropertyCategories(),
+    getPropertyTypes(),
+  ]);
 
   return (
     <div>
@@ -71,7 +88,7 @@ export default async function PropertiesPage({
       />
 
       <Suspense>
-        <PropertiesFilterBar />
+        <PropertiesFilterBar cities={cities} categories={categories} types={types} />
       </Suspense>
       <PropertiesGrid properties={properties} searchParams={resolvedParams} />
     </div>

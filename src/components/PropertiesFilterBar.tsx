@@ -2,21 +2,21 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import Dropdown from "@/components/Dropdown";
+import { Taxonomy } from "@/lib/types";
 
-const CITY_OPTIONS = [
-  { value: "Abu Dhabi", label: "Abu Dhabi" },
-  { value: "Dubai", label: "Dubai" },
-];
-const CATEGORY_OPTIONS = [
-  { value: "Residential", label: "Residential" },
-  { value: "Commercial", label: "Commercial" },
-];
-const TYPE_OPTIONS = [
-  { value: "For Rent", label: "For Rent" },
-  { value: "For Sale", label: "For Sale" },
-];
+function toOptions(items: Taxonomy[]) {
+  return items.map((item) => ({ value: item.slug, label: item.name }));
+}
 
-export default function PropertiesFilterBar() {
+export default function PropertiesFilterBar({
+  cities,
+  categories,
+  types,
+}: {
+  cities: Taxonomy[];
+  categories: Taxonomy[];
+  types: Taxonomy[];
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -46,7 +46,7 @@ export default function PropertiesFilterBar() {
           <Dropdown
             value={city}
             onChange={(v) => update("city", v)}
-            options={CITY_OPTIONS}
+            options={toOptions(cities)}
             placeholder="All Cities"
           />
         </div>
@@ -55,7 +55,7 @@ export default function PropertiesFilterBar() {
           <Dropdown
             value={category}
             onChange={(v) => update("category", v)}
-            options={CATEGORY_OPTIONS}
+            options={toOptions(categories)}
             placeholder="All Categories"
           />
         </div>
@@ -64,7 +64,7 @@ export default function PropertiesFilterBar() {
           <Dropdown
             value={type}
             onChange={(v) => update("type", v)}
-            options={TYPE_OPTIONS}
+            options={toOptions(types)}
             placeholder="All Types"
           />
         </div>

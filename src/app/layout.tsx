@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Chatbot from "@/components/Chatbot";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import SmoothScroll from "@/components/SmoothScroll";
-import CustomCursor from "@/components/CustomCursor";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -42,17 +36,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-cream text-charcoal dark:bg-charcoal dark:text-cream transition-colors duration-500">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <SmoothScroll>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <Chatbot />
-            <CustomCursor />
-          </SmoothScroll>
-        </ThemeProvider>
-      </body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

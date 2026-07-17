@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { AutoSlugInput } from "../components/AutoSlugInput";
 
 export default defineType({
   name: "property",
@@ -15,28 +16,30 @@ export default defineType({
       name: "slug",
       title: "Slug",
       type: "slug",
+      hidden: true,
+      components: { input: AutoSlugInput },
       options: { source: "title", maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "city",
       title: "City",
-      type: "string",
-      options: { list: ["Abu Dhabi", "Dubai"] },
+      type: "reference",
+      to: [{ type: "city" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "category",
       title: "Category",
-      type: "string",
-      options: { list: ["Residential", "Commercial"] },
+      type: "reference",
+      to: [{ type: "propertyCategory" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "type",
       title: "Type",
-      type: "string",
-      options: { list: ["For Rent", "For Sale"] },
+      type: "reference",
+      to: [{ type: "propertyType" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -99,6 +102,28 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: "title", subtitle: "city", media: "coverImage" },
+    select: {
+      title: "title",
+      cityName: "city.name",
+      categoryName: "category.name",
+      typeName: "type.name",
+      media: "coverImage",
+    },
+    prepare({ title, cityName, categoryName, typeName, media }) {
+      const missing = [
+        !cityName && "City",
+        !categoryName && "Category",
+        !typeName && "Type",
+      ].filter(Boolean) as string[];
+
+      return {
+        title,
+        subtitle:
+          missing.length > 0
+            ? `⚠ Missing ${missing.join(", ")}`
+            : cityName,
+        media,
+      };
+    },
   },
 });

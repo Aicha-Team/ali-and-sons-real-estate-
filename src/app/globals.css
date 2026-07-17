@@ -18,13 +18,11 @@
   --font-sans: var(--font-inter), sans-serif;
 }
 
-html {
+.site-chrome {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-charcoal);
   font-family: var(--font-inter), sans-serif;
 }
 
@@ -46,9 +44,10 @@ body {
 
 /* Custom cursor replaces the native one on precise-pointer devices */
 @media (pointer: fine) {
-  *,
-  *::before,
-  *::after {
+  .site-chrome,
+  .site-chrome *,
+  .site-chrome *::before,
+  .site-chrome *::after {
     cursor: none !important;
   }
 }

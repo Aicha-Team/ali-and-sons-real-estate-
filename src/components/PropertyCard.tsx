@@ -1,89 +1,92 @@
 "use client";
 
-import { useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { MapPin, Ruler } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { Property } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export default function PropertyCard({ property }: { property: Property }) {
-  const pointerX = useMotionValue(0.5);
-  const pointerY = useMotionValue(0.5);
-
-  const springX = useSpring(pointerX, { stiffness: 120, damping: 16, mass: 0.4 });
-  const springY = useSpring(pointerY, { stiffness: 120, damping: 16, mass: 0.4 });
-
-  const rotateX = useTransform(springY, [0, 1], [4, -4]);
-  const rotateY = useTransform(springX, [0, 1], [-4, 4]);
-
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      pointerX.set((e.clientX - rect.left) / rect.width);
-      pointerY.set((e.clientY - rect.top) / rect.height);
-    },
-    [pointerX, pointerY]
-  );
-
-  const handlePointerLeave = useCallback(() => {
-    pointerX.set(0.5);
-    pointerY.set(0.5);
-  }, [pointerX, pointerY]);
-
   return (
-    <div style={{ perspective: 1000 }}>
-      <motion.div
-        onPointerMove={handlePointerMove}
-        onPointerLeave={handlePointerLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        whileHover={{ y: -6 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="group bg-cream overflow-hidden flex flex-col shadow-[0_2px_20px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.18)] transition-shadow"
-      >
-        <Link href={`/properties/${property.slug}`} className="block relative aspect-[4/3] overflow-hidden">
-          <Image
-            src={property.coverImage}
-            alt={property.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+    <motion.article
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      className="group"
+    >
+      <Link href={`/properties/${property.slug}`} className="block">
+        {/* Image */}
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <motion.div
+            variants={{ rest: { scale: 1 }, hover: { scale: 1.06 } }}
+            transition={{ duration: 1.2, ease: EASE }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={property.coverImage}
+              alt={property.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover"
+            />
+          </motion.div>
+
+          <motion.div
+            variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-transparent"
           />
-          <span className="absolute top-4 left-4 bg-white text-[#1c1c1c] text-[11px] uppercase tracking-[0.15em] px-3 py-1.5 font-medium">
-            {property.type}
+
+          {/* Type chip — refined glass */}
+          <span className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md text-charcoal text-[10px] uppercase tracking-[0.2em] px-3.5 py-2 font-medium">
+            {property.type.name}
           </span>
-        </Link>
-        <div className="p-6 flex flex-col gap-3 flex-1">
-          <span className="text-xs uppercase tracking-[0.15em] text-grey font-medium">
-            {property.category}
-          </span>
-          <Link href={`/properties/${property.slug}`}>
-            <h3 className="font-display font-normal text-2xl leading-snug hover:text-charcoal/60 transition-colors">
-              {property.title}
-            </h3>
-          </Link>
-          <div className="flex items-center gap-4 text-sm text-grey">
-            <span className="flex items-center gap-1">
-              <MapPin size={15} /> {property.city}
+
+          {/* Hover CTA */}
+          <motion.span
+            variants={{
+              rest: { opacity: 0, y: 10 },
+              hover: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 0.45, ease: EASE }}
+            className="absolute bottom-4 right-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-medium text-white"
+          >
+            View
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-white/10 backdrop-blur-md">
+              <ArrowRight size={13} />
             </span>
-            <span className="flex items-center gap-1">
-              <Ruler size={15} /> {property.size}
+          </motion.span>
+        </div>
+
+        {/* Editorial text block — no card chrome */}
+        <div className="pt-6">
+          <div className="flex items-baseline justify-between gap-4">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-grey font-medium">
+              {property.city.name} — {property.category.name}
+            </span>
+            <span className="text-[11px] tracking-[0.05em] text-grey shrink-0">
+              {property.size}
             </span>
           </div>
-          <div className="mt-auto pt-4 flex items-center justify-between border-t border-charcoal/10">
-            <span className="font-display font-normal text-xl text-charcoal">
+
+          <h3 className="mt-3 font-display font-normal text-[1.65rem] leading-[1.2] text-charcoal transition-colors duration-300 group-hover:text-charcoal/60">
+            {property.title}
+          </h3>
+
+          <div className="mt-5 pt-4 border-t border-charcoal/10 flex items-center justify-between">
+            <span className="font-display font-normal text-xl text-charcoal tracking-wide">
               {formatPrice(property.price)}
             </span>
-            <Link
-              href={`/properties/${property.slug}`}
-              className="text-xs uppercase tracking-[0.15em] font-medium text-charcoal border-b border-charcoal hover:opacity-60 transition-opacity"
-            >
-              View Details →
-            </Link>
+            <span className="relative text-[10px] uppercase tracking-[0.2em] font-medium text-charcoal">
+              Details
+              <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-charcoal transition-transform duration-500 ease-out group-hover:scale-x-100" />
+            </span>
           </div>
         </div>
-      </motion.div>
-    </div>
+      </Link>
+    </motion.article>
   );
 }
